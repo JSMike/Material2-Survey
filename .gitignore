@@ -1,0 +1,14 @@
+# Ignore Node & TSD
+node_modules/
+typings/
+
+# Ignore OS Generated Files
+.DS_Store*
+Thumbs.db
+
+# Ignore Build Directory
+build/
+
+# Ignore built js
+client/**/*.js
+client/**/*.map
