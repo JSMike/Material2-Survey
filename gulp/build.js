@@ -9,8 +9,7 @@ var tsProject = tsc.createProject('tsconfig.json');
 gulp.task('build', function () {
   var sourceTsFiles = [
     conf.tsFiles,
-    conf.tsdFiles,
-    conf.tsIgnore
+    conf.tsdFiles
   ];
   var tsResult = gulp.src(sourceTsFiles)
     .pipe(sourcemaps.init())
