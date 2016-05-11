@@ -51,18 +51,18 @@ import {SurveyLogin} from './survey-login';
 @RouteConfig ([
   {
     path: '/view',
-    name: 'View Survey',
+    name: 'View',
     component: SurveyView,
     useAsDefault: true
   },
   {
     path: '/login',
-    name: 'Admin Login',
+    name: 'Login',
     component: SurveyLogin
   },
   {
     path: '/edit',
-    name: 'Edit Survey',
+    name: 'Edit',
     component: SurveyEdit
   }
 ])

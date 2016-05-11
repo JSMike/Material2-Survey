@@ -24,9 +24,9 @@ export class SurveySidenav {
 
   constructor() {
     this.list = [
-      { text: 'Log In', route: '["login"]' },
-      { text: 'View Survey', route: '["view"]' },
-      { text: 'Edit Survey Questions', route: '["edit"]' }
+      { text: 'Log In', route: '["Login"]' },
+      { text: 'View Survey', route: '["View"]' },
+      { text: 'Edit Survey Questions', route: '["Edit"]' }
     ];
   }
 
