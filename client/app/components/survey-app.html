@@ -1,9 +1,11 @@
-<md-sidenav-layout>
-  <survey-sidenav></survey-sidenav>
-
-  <survey-toolbar></survey-toolbar>
-
-  <div class="app-content">
+<md-sidenav-layout fullscreen>
+  <md-sidenav mode='side' align='start' class='app-sidenav'>
+    <survey-sidenav></survey-sidenav>
+  </md-sidenav>
+  <md-toolbar color="primary">
+    <survey-toolbar></survey-toolbar>
+  </md-toolbar>
+  <div class="app-content" fullscreen>
 
     <md-card class="app-input-section">
       <md-input placeholder="First name"></md-input>

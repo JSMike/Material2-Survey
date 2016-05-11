@@ -1,37 +1,29 @@
-import { Component, ViewChild } from '@angular/core';
-import {MdSidenav} from '@angular2-material/sidenav';
-import {SurveySidenavService} from '../services/survey-sidenav.svc';
+import {Component} from '@angular/core';
+import {MdToolbar} from '@angular2-material/toolbar';
+import {MdButton} from '@angular2-material/button';
 
 @Component({
   selector: 'survey-sidenav',
   template: `
-  <md-sidenav #sidenav mode='side' align='start' class='app-sidenav'>
-    <md-toolbar>
+    <md-toolbar color="accent">
       Survey App Menu
     </md-toolbar>
-    <md-button *ngFor='let btn of buttons' (click)='clickEvt()'>
-      {{btn.text}}
-    </md-button>
-  </md-sidenav>
+    <md-nav-list>
+      <button md-button *ngFor='let btn of buttons' (click)='clickEvt(btn)' color="accent">
+        {{btn.text}}
+      </button>
+    </md-nav-list>
   `,
-  directives: [MdSidenav],
-  providers: [SurveySidenavService]
+  directives: [MdToolbar, MdButton]
 })
 export class SurveySidenav {
-  buttons;
-  side = 'start';
-  @ViewChild("md-sidenav") sidenav: MdSidenav;
+  buttons: any;
+  clickEvt(btn: number): void {
+    console.log(btn);
+  }
 
-  constructor(sidenavService: SurveySidenavService) {
-    sidenavService.sidenavToggle$.subscribe(side => {
-      if (side === 'start') {
-        this.sidenav.toggle();
-      }
-
-    });
-
+  constructor() {
     this.buttons = [{ text: 'test', value: 0 }];
-
   }
 
 }

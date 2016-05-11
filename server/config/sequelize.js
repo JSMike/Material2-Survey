@@ -2,7 +2,7 @@
 
 var Sequelize = require('Sequelize');
 var passportSequelize = require('passport-local-sequelize');
-var db = new Sequelize('sumome', 'sumome', 'sumome');
+var db = new Sequelize('survey', 'survey', 'survey');
 
 /**
  * Define Models

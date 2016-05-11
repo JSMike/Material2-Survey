@@ -1,3 +1,3 @@
-create database sumome;
-create user 'sumome'@'localhost' identified by 'sumome';
-grant all privileges on sumome.* to 'sumome'@'localhost';
+create database survey;
+create user 'survey'@'localhost' identified by 'survey';
+grant all privileges on survey.* to 'survey'@'localhost';
