@@ -2,7 +2,19 @@
   Survey App Menu
 </md-toolbar>
 <md-nav-list>
-  <a md-list-item *ngFor='let item of list' color="accent">
-    {{item.text}}
+  <a md-list-item
+    color="accent"
+    [routerLink]="['Admin Login']">
+    Log In
+  </a>
+  <a md-list-item
+    color="accent"
+    [routerLink]="['View Survey']">
+    View Survey
+  </a>
+  <a md-list-item
+    color="accent"
+    [routerLink]="['Edit Survey']">
+    Edit Survey
   </a>
 </md-nav-list>

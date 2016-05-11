@@ -68,6 +68,11 @@ const packages: any = {
     defaultExtension: 'js',
     main: 'icon.js'
   },
+  '@angular/router-deprecated': {
+    format: 'cjs',
+    defaultExtension: 'js',
+    main: 'router.js'
+  },
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,7 @@
 // angular2 + material2 directives/providers
 import {Component, ViewChild, AfterViewInit} from '@angular/core';
+import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+
 import {MD_SIDENAV_DIRECTIVES, MdSidenav} from '@angular2-material/sidenav';
 import {MdToolbar} from '@angular2-material/toolbar';
 import {MdButton} from '@angular2-material/button';
@@ -17,11 +19,14 @@ import {SurveyToolbar} from './survey-toolbar';
 import {SurveySidenav} from './survey-sidenav';
 import {SurveySidenavService} from '../services/survey-sidenav.svc';
 import {SurveyEdit} from './survey-edit';
+import {SurveyView} from './survey-view';
+import {SurveyLogin} from './survey-login';
 
 @Component({
   selector: 'survey-app',
   templateUrl: '/app/components/templates/survey-app.html',
   directives: [
+    ROUTER_DIRECTIVES,
     MD_SIDENAV_DIRECTIVES,
     MD_CARD_DIRECTIVES,
     MdButton,
@@ -37,8 +42,30 @@ import {SurveyEdit} from './survey-edit';
     SurveySidenav,
     SurveyEdit
   ],
-  providers: [MdIconRegistry, MdRadioDispatcher, SurveySidenavService]
+  providers: [
+    MdIconRegistry,
+    MdRadioDispatcher,
+    SurveySidenavService
+  ]
 })
+@RouteConfig ([
+  {
+    path: '/view',
+    name: 'View Survey',
+    component: SurveyView,
+    useAsDefault: true
+  },
+  {
+    path: '/login',
+    name: 'Admin Login',
+    component: SurveyLogin
+  },
+  {
+    path: '/edit',
+    name: 'Edit Survey',
+    component: SurveyEdit
+  }
+])
 export class SurveyApp implements AfterViewInit {
   buttons: any;
   side: string = 'start';
