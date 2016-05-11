@@ -3,7 +3,7 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: local('Material Icons'), local('MaterialIcons-Regular'), url(/app/Material-Font.woff2) format('woff2');
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(/app/resources/Material-Font.woff2) format('woff2');
 }
 
 .material-icons {
@@ -82,7 +82,7 @@
   font-size: 16px;
 }
 
-md-card.app-input-section {
+.survey-card {
   max-width: 80%;
   height: 90%;
   min-height: 90%;
@@ -97,4 +97,21 @@ md-card.app-input-section {
 
 .app-progress {
   margin: 20px;
+}
+
+.survey-card.survey .options md-list-item .md-list-item:hover {
+  background-color: rgba(133, 133, 133, .5)
+}
+
+.survey-card.survey .options md-list-item.selected .md-list-item {
+  background-color: rgba(133, 133, 133, .7)
+}
+
+.survey-card .md-input-wrapper, .survey-card md-input {
+  width: 100%;
+}
+
+.material-icons {
+  position: relative;
+  top: 6px;
 }

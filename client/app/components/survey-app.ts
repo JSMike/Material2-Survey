@@ -1,4 +1,5 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+// angular2 + material2 directives/providers
+import {Component, ViewChild, AfterViewInit} from '@angular/core';
 import {MD_SIDENAV_DIRECTIVES, MdSidenav} from '@angular2-material/sidenav';
 import {MdToolbar} from '@angular2-material/toolbar';
 import {MdButton} from '@angular2-material/button';
@@ -11,13 +12,15 @@ import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MdIcon, MdIconRegistry} from '@angular2-material/icon';
+
 import {SurveyToolbar} from './survey-toolbar';
 import {SurveySidenav} from './survey-sidenav';
 import {SurveySidenavService} from '../services/survey-sidenav.svc';
+import {SurveyEdit} from './survey-edit';
 
 @Component({
   selector: 'survey-app',
-  templateUrl: '/app/components/survey-app.html',
+  templateUrl: '/app/components/templates/survey-app.html',
   directives: [
     MD_SIDENAV_DIRECTIVES,
     MD_CARD_DIRECTIVES,
@@ -31,7 +34,8 @@ import {SurveySidenavService} from '../services/survey-sidenav.svc';
     MdToolbar,
     MdIcon,
     SurveyToolbar,
-    SurveySidenav
+    SurveySidenav,
+    SurveyEdit
   ],
   providers: [MdIconRegistry, MdRadioDispatcher, SurveySidenavService]
 })

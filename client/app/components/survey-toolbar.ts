@@ -6,7 +6,7 @@ import {SurveySidenavService} from '../services/survey-sidenav.svc';
 @Component({
   selector: 'survey-toolbar',
   template: `
-    <button md-button (click)="sidenavToggle('start')" md-icon-button>
+    <button (click)="sidenavToggle('start')" md-button>
       <i class="material-icons app-toolbar-menu">menu</i>
     </button>
     Random Survey

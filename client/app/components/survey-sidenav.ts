@@ -1,29 +1,31 @@
 import {Component} from '@angular/core';
 import {MdToolbar} from '@angular2-material/toolbar';
 import {MdButton} from '@angular2-material/button';
+import {MD_SIDENAV_DIRECTIVES} from '@angular2-material/sidenav';
+import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 
 @Component({
   selector: 'survey-sidenav',
-  template: `
-    <md-toolbar color="accent">
-      Survey App Menu
-    </md-toolbar>
-    <md-nav-list>
-      <button md-button *ngFor='let btn of buttons' (click)='clickEvt(btn)' color="accent">
-        {{btn.text}}
-      </button>
-    </md-nav-list>
-  `,
-  directives: [MdToolbar, MdButton]
+  templateUrl: '/app/components/templates/survey-sidenav.html',
+  directives: [
+    MdToolbar,
+    MdButton,
+    MD_SIDENAV_DIRECTIVES,
+    MD_LIST_DIRECTIVES
+  ]
 })
 export class SurveySidenav {
-  buttons: any;
+  list: any[];
   clickEvt(btn: number): void {
     console.log(btn);
   }
 
   constructor() {
-    this.buttons = [{ text: 'test', value: 0 }];
+    this.list = [
+      { text: 'Log In', route: 'login' },
+      { text: 'View Survey', route: 'view' },
+      { text: 'Edit Survey Questions', route: 'edit' }
+    ];
   }
 
 }

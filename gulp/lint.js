@@ -20,7 +20,7 @@ gulp.task('lint-js', function () {
 });
 
 gulp.task('lint-ts', function () {
-  return gulp.src(conf.tsFiles)
+  return gulp.src([conf.tsFiles, conf.tsIgnore])
     .pipe(tslint())
     .pipe(tslint.report(tsStylish, {
       bell: false

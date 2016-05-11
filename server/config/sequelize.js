@@ -46,13 +46,14 @@ var Option = db.define('SurveyOption', {
   value: Sequelize.INTEGER
 });
 
-var Answer = db.define('Answer', {});
+var Answer = db.define('Answer', {
+  session: Sequelize.STRING
+});
 
 /**
  * Define Relationships
  */
 Survey.hasMany(Option);
-User.hasMany(Answer);
 Survey.hasMany(Answer);
 Option.hasMany(Answer);
 

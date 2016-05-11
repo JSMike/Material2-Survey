@@ -13,7 +13,7 @@ module.exports = {
   serverFiles: serverPath + '/**/*.js',
   tsFiles: devPath + '/**/*.ts',
   tsdFiles: typingsPath + 'main/**/*.js',
-  tsIgnore: '!' + devPath + '/systemjs.config.ts',
+  tsIgnore: '!' + devPath + '/systemjs.config.ts', // ignore ng2 system generated formatting issues
   builtJS: path.join(devPath, '/app/**/*.js'),
   clientImg: path.join(devPath, '/img') + '/**/*.*',
   nodemon: {

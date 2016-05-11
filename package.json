@@ -55,7 +55,8 @@
     "rxjs": "5.0.0-beta.6",
     "sequelize": "^3.23.0",
     "systemjs": "~0.19.27",
-    "ui-router-ng2": "^1.0.0-alpha.4",
+    "ui-router": "git+https://github.com/angular-ui/ui-router.git#8845772c2c4672bd06aef0c6f0a80a21aeb875af",
+    "ui-router-ng2": "^1.0.0-alpha.5",
     "zone.js": "^0.6.12"
   },
   "devDependencies": {
