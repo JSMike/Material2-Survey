@@ -1,0 +1,14 @@
+<md-card class="survey-card results" layout="column">
+  <md-card-title>
+      {{survey.title}}
+  </md-card-title>
+    <md-card-subtitle>
+      Answers: {{survey.total}}
+    </md-card-subtitle>
+  <md-list class="options">
+    <md-list-item
+      *ngFor="let option of survey.options; let idx = index" layout="row">
+      <span class="results">{{option.results}} / {{survey.total}}</span><span>{{option.text}}</span>
+    </md-list-item>
+  </md-list>
+</md-card>

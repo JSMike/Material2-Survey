@@ -15,12 +15,15 @@ import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MdIcon, MdIconRegistry} from '@angular2-material/icon';
 
+import {SurveyEdit} from './survey-edit';
+import {SurveyList} from './survey-list';
+import {SurveyLogin} from './survey-login';
+import {SurveyResults} from './survey-results';
+import {SurveyView} from './survey-view';
 import {SurveyToolbar} from './survey-toolbar';
 import {SurveySidenav} from './survey-sidenav';
 import {SurveySidenavService} from '../services/survey-sidenav.svc';
-import {SurveyEdit} from './survey-edit';
-import {SurveyView} from './survey-view';
-import {SurveyLogin} from './survey-login';
+import {SurveyLoginService} from '../services/survey-login.svc';
 
 @Component({
   selector: 'survey-app',
@@ -45,7 +48,8 @@ import {SurveyLogin} from './survey-login';
   providers: [
     MdIconRegistry,
     MdRadioDispatcher,
-    SurveySidenavService
+    SurveySidenavService,
+    SurveyLoginService
   ]
 })
 @RouteConfig ([
@@ -61,9 +65,19 @@ import {SurveyLogin} from './survey-login';
     component: SurveyLogin
   },
   {
+    path: '/list',
+    name: 'List',
+    component: SurveyList
+  },
+  {
     path: '/edit',
     name: 'Edit',
     component: SurveyEdit
+  },
+  {
+    path: '/results',
+    name: 'Results',
+    component: SurveyResults
   }
 ])
 export class SurveyApp implements AfterViewInit {
@@ -79,16 +93,11 @@ export class SurveyApp implements AfterViewInit {
     };
   }
 
-  clickEvt(id: number): void {
-    console.log(id);
-  }
-
   constructor(sidenavService: SurveySidenavService) {
     sidenavService.sidenavToggle$.subscribe(side => {
       if (side === 'start') {
         this.toggler();
       }
-
     });
     this.buttons = [{ text: 'test', value: 0 }];
   }

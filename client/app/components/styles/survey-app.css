@@ -111,7 +111,40 @@
   width: 100%;
 }
 
-.material-icons {
+md-toolbar .material-icons {
   position: relative;
   top: 6px;
+}
+
+md-card-title .material-icons {
+  position: relative;
+  top: 3px;
+}
+
+.survey-card.login .md-list-item {
+  margin: 5px 0;
+}
+
+.survey-card.login .md-input-prefix {
+  width: 40px;
+}
+
+.survey-card.survey .md-list-item, .survey-card.results .md-list-item{
+  border: 1px dashed rgba(133, 133, 133, .5);
+  border-radius: 10px;
+}
+
+.survey-card button md-icon {
+  position: relative;
+  top: 6px;
+  margin: 0 3px;
+}
+
+.survey-card.results md-list-item .results {
+  background: #009688;
+  color: white;
+  padding: 13px;
+  margin-left: -16px;
+  margin-right: 10px;
+  border-radius: 10px 0 0 10px;
 }

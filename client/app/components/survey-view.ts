@@ -1,6 +1,4 @@
-import {Component, AfterViewInit} from '@angular/core';
-import {Router, OnActivate} from '@angular/router-deprecated';
-
+import {Component} from '@angular/core';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MdButton} from '@angular2-material/button';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
@@ -18,11 +16,9 @@ import {MdIcon} from '@angular2-material/icon';
     MdIcon
   ]
 })
-export class SurveyView implements OnActivate, AfterViewInit {
-  router: Router;
+export class SurveyView {
   survey: Object;
-  options: any[];
-  selectedIndex: number = -1;
+  selectedIndex: number;
 
   submit(): void {
     console.log('submitted: ' + this.selectedIndex);
@@ -32,27 +28,16 @@ export class SurveyView implements OnActivate, AfterViewInit {
     this.selectedIndex = index;
   }
 
-  routerOnActivate(): void {
-    console.log('router activate');
-  }
+  constructor() {
+    this.survey = {
+      title: 'All the doors are locked! How did you get in here!?',
+      options: [
+        { id: 0, text: 'yes' },
+        { id: 1, text: 'no' }
+      ]
+    };
 
-  ngAfterViewInit(): void {
-    console.log('view init');
-  }
-
-  constructor(router: Router) {
-    console.log('constructor');
-    this.router = router;
-    this.router.subscribe(data => console.log(data));
-    this.options = [
-      {
-        title: 'All the doors are locked! How did you get in here!?',
-        options: [
-          { id: 0, text: 'yes' },
-          { id: 1, text: 'no' }
-        ]
-      }
-    ];
+    this.selectedIndex = -1;
   }
 
 }

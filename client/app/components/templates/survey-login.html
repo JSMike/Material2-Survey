@@ -1,24 +1,24 @@
 <md-card class="survey-card login" layout="column" align="center">
-  <md-card-title><md-icon>lock outline</md-icon>Login</md-card-title>
+  <md-card-title><md-icon>lock_outline</md-icon>Login</md-card-title>
   <md-list>
-    <md-list-item>
+    <md-list-item align="start">
       <md-input placeholder="Username" [ngModel]="login.user">
         <span md-prefix>
-          <i class="material-icons app-input-icon">account circle</i>
+          <md-icon>account_circle</md-icon>
           &nbsp;
         </span>
       </md-input>
     </md-list-item>
-    <md-list-item>
+    <md-list-item align="start">
       <md-input placeholder="Password" [(ngModel)]="login.pass">
         <span md-prefix>
-          <i class="material-icons app-input-icon">vpn key</i>
+          <md-icon>vpn_key</md-icon>
           &nbsp;
         </span>
       </md-input>
     </md-list-item>
   </md-list>
   <div layout="row" align="end" *ngIf="selectedIndex > -1">
-    <button md-button (click)="login()"><md-icon>input</md-icon>Login</button>
+    <button md-button (click)="submit()"><md-icon>input</md-icon>Login</button>
   </div>
 </md-card>

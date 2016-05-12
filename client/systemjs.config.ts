@@ -73,6 +73,11 @@ const packages: any = {
     defaultExtension: 'js',
     main: 'router.js'
   },
+  'lodash': {
+    format: 'cjs',
+    defaultExtension: 'js',
+    main: 'lodash.js'
+  }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,6 +96,7 @@ const barrels: string[] = [
 
   // Thirdparty barrels.
   'rxjs',
+  'lodash',
 
   // App specific barrels.
   'app',
@@ -111,7 +117,8 @@ System.config({
   map: {
     '@angular': 'lib/@angular',
     'rxjs': 'lib/rxjs',
-    'main': 'app/main.js'
+    'main': 'app/main.js',
+    'lodash': 'lib/lodash'
   },
   packages: _cliSystemConfig
 });

@@ -4,17 +4,8 @@
 <md-nav-list>
   <a md-list-item
     color="accent"
-    [routerLink]="['Login']">
-    Log In
-  </a>
-  <a md-list-item
-    color="accent"
-    [routerLink]="['View']">
-    View Survey
-  </a>
-  <a md-list-item
-    color="accent"
-    [routerLink]="['Edit']">
-    Edit Survey
+    *ngFor="let option of options | ValidMenuItem:user"
+    (click)="actionItem(option.action)">
+    <span md-line>{{option.title}}</span>
   </a>
 </md-nav-list>

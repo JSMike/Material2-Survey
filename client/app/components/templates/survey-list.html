@@ -1,0 +1,25 @@
+<div *ngIf="surveys.length > 0">
+  <md-card class="survey-card list" layout="column"
+    *ngFor="let survey of surveys; let i = index">
+    <md-card-title>
+        {{survey.title}}
+    </md-card-title>
+    <md-card-subtitle>
+      Answers: {{survey.total}}
+    </md-card-subtitle>
+    <md-card-actions align="end">
+      <button md-button color="accent" (click)="action(i, 'Edit')">Edit</button>
+      <button md-button color="primary" (click)="action(i, 'Results')">View Results</button>
+      <button md-button color="warn" (click)="action(i, 'Delete')">Delete</button>
+    </md-card-actions>
+  </md-card>
+</div>
+<md-card class="survey-card list" layout="column"
+  *ngIf="surveys.length === 0">
+  <md-card-title>
+    Oh no! There are no survey Questions!
+  </md-card-title>
+  <md-card-actions align="end">
+    <button md-button color="accent" (click)="action(-1, 'Edit')">Create Survey Question</button>
+  </md-card-actions>
+</md-card>

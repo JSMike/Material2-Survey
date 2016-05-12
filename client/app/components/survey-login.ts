@@ -17,20 +17,18 @@ import {MdIcon} from '@angular2-material/icon';
   ]
 })
 export class SurveyLogin {
-  title: string;
-  options: any[];
+  login: Object;
   selectedIndex: number = -1;
 
   submit(): void {
-    console.log('submitted: ' + this.selectedIndex);
-  }
-
-  setSelected(index: number): void {
-    this.selectedIndex = index;
+    console.log('submitted');
   }
 
   constructor() {
-    this.options = [{}];
+    this.login = {
+      user: '',
+      pass: ''
+    };
   }
 
 }
