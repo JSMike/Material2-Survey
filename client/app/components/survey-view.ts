@@ -30,6 +30,7 @@ export class SurveyView {
 
   constructor() {
     this.survey = {
+      id: 0,
       title: 'All the doors are locked! How did you get in here!?',
       options: [
         { id: 0, text: 'yes' },

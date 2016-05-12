@@ -31,11 +31,17 @@ export class SurveyResults implements OnInit {
     this.id = +this.routeParams.get('id');
     console.log(this.id);
     this.survey = {
+      id: 0,
       title: 'What is your quest?',
       options: [
         { id: 0, text: 'I seek the Grail.', results: 7 },
-        { id: 1, text: 'To try to take over the world!', results: 2 },
-        { id: 1, text: 'To kill all humans.', results: 1 }
+        { id: 1, text: 'To take over the world!', results: 2 },
+        { id: 2, text: 'To kill all humans.', results: 1 },
+        {
+          id: 3,
+          text: 'To be a cat with a poptart body flying through space leaving a rainbow trail',
+          results: 0
+        }
       ],
       total: 10
     };

@@ -18,7 +18,7 @@ function isLoggedIn(req, res, next) {
 
 var routing = function (router, staticPath, passport) {
 
-  router.post('/login', function (req, res, next) {
+  router.post('/login', function (req, res) {
     passport.authenticate('local-login', function (err, user, msg) {
       if (err) {
         return res.json({
@@ -39,22 +39,22 @@ var routing = function (router, staticPath, passport) {
         if (e) {
           return res.json({
             error: true,
-            redirect: 'login',
+            redirect: 'Login',
             message: _.get(e, 'message', 'Error!')
           });
         }
 
         return res.json({
           user: user,
-          redirect: 'local'
+          redirect: 'List'
         });
       });
-    })(req, res, next);
+    })(req.user, req.pass);
   });
 
   router.get('/logout', isLoggedIn, function (req, res) {
     req.logout();
-    res.json({ redirect: 'blog' });
+    res.json({ redirect: 'View' });
   });
 
   router.get('/api/survey', function (req, res) {
@@ -64,9 +64,38 @@ var routing = function (router, staticPath, passport) {
     }
 
     Survey.findOne(query, {
-      _id: 0,
-      'basic.phone': 0,
-      'basic.location': 0
+    }, function (err, resume) {
+      if (err) {
+        return res.status(500).send('Error: ' + err);
+      }
+
+      return res.send(resume);
+    });
+  });
+
+  router.post('/api/survey', function (req, res) {
+    var query = {};
+    if (req.query.after) {
+      query.updated = { $gt: new Date(req.query.after) };
+    }
+
+    Survey.findOne(query, {
+    }, function (err, resume) {
+      if (err) {
+        return res.status(500).send('Error: ' + err);
+      }
+
+      return res.send(resume);
+    });
+  });
+
+  router.post('/api/answer', function (req, res) {
+    var query = {};
+    if (req.query.after) {
+      query.updated = { $gt: new Date(req.query.after) };
+    }
+
+    Survey.findOne(query, {
     }, function (err, resume) {
       if (err) {
         return res.status(500).send('Error: ' + err);
