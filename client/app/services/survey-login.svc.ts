@@ -12,8 +12,11 @@ interface IUser {
 export class SurveyLoginService {
   http: Http;
   userData: IUser;
+  login$: Observable<IUser>;
+  private _loginStatusChangeObs: Observer<IUser>;
 
   constructor(http: Http) {
+    this.login$ = new Observable(observer => this._loginStatusChangeObs = observer).share();
     this.http = http;
     this.userData = {
       isLoggedIn: true,
@@ -32,6 +35,7 @@ export class SurveyLoginService {
       .map((res: Response) => res.json())
       .map(res => {
         this.userData = res;
+        this._loginStatusChangeObs.next(res);
         return res;
       });
   }
@@ -46,6 +50,7 @@ export class SurveyLoginService {
           isLoggedIn: false,
           type: 'anonymous'
         };
+        this._loginStatusChangeObs.next(this.userData);
         return this.userData;
       });
   }

@@ -58,9 +58,7 @@ export class SurveySidenav implements OnInit {
 
   actionItem(action: string): void {
     if (action === 'Logout') {
-      this.loginSvc.logout().subscribe(usr => {
-        this.user = usr;
-      });
+      this.loginSvc.logout();
     } else {
       this.router.navigate([action]);
     }
@@ -69,6 +67,9 @@ export class SurveySidenav implements OnInit {
   constructor(router: Router, loginSvc: SurveyLoginService) {
     this.router = router;
     this.loginSvc = loginSvc;
+    this.loginSvc.login$.subscribe(user => {
+      this.user = user;
+    });
   }
 
   ngOnInit(): void {
