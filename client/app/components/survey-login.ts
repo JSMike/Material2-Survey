@@ -30,7 +30,9 @@ export class SurveyLogin {
   selectedIndex: number = -1;
 
   submit(): void {
-    this.loginSvc.login(this.login);
+    this.loginSvc.login(this.login).subscribe(res => {
+      console.log(res);
+    });
   }
 
   constructor(router: Router, loginSvc: SurveyLoginService) {
@@ -42,8 +44,8 @@ export class SurveyLogin {
       }
     });
     this.login = {
-      user: '',
-      pass: ''
+      username: '',
+      password: ''
     };
   }
 

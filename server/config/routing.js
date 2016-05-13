@@ -18,7 +18,7 @@ function isLoggedIn(req, res, next) {
 
 var routing = function (router, staticPath, passport) {
 
-  router.post('/login', function (req, res) {
+  router.post('/api/login', function (req, res, next) {
     passport.authenticate('local-login', function (err, user, msg) {
       if (err) {
         return res.json({
@@ -45,16 +45,24 @@ var routing = function (router, staticPath, passport) {
         }
 
         return res.json({
-          user: user,
+          user: {
+            id: user.id,
+            type: user.type,
+            username: user.username,
+            isLoggedIn: req.isAuthenticated()
+          },
           redirect: 'List'
         });
       });
-    })(req.user, req.pass);
+    })(req, res, next);
   });
 
-  router.get('/logout', isLoggedIn, function (req, res) {
+  router.get('/api/logout', isLoggedIn, function (req, res) {
     req.logout();
-    res.json({ redirect: 'View' });
+    res.json({
+      redirect: 'View',
+      isLoggedIn: req.isAuthenticated()
+    });
   });
 
   router.get('/api/survey', function (req, res) {
@@ -106,6 +114,9 @@ var routing = function (router, staticPath, passport) {
   });
 
   router.get('/', function (req, res) {
+    if (!res.session.cookie.id) {
+      res.cookie('id', req.session.id, { expires: new Date(999999999999999)} );
+    }
     return res.sendFile(path.join(staticPath, 'index.html'));
   });
 

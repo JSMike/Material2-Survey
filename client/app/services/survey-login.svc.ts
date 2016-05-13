@@ -1,4 +1,5 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Inject} from '@angular/core';
+import {Router} from '@angular/router-deprecated';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
@@ -10,18 +11,20 @@ interface IUser {
 
 @Injectable ()
 export class SurveyLoginService {
+  router: Router;
   http: Http;
   userData: IUser;
   login$: Observable<IUser>;
   private _loginStatusChangeObs: Observer<IUser>;
 
-  constructor(http: Http) {
+  constructor(@Inject(Http) http: Http, router: Router) {
     this.login$ = new Observable(observer => this._loginStatusChangeObs = observer).share();
     this.http = http;
     this.userData = {
-      isLoggedIn: true,
-      type: 'Admin'
+      isLoggedIn: false,
+      type: 'anonymous'
     };
+    this.router = router;
   }
 
   getUser(): Object {
@@ -35,7 +38,8 @@ export class SurveyLoginService {
       .map((res: Response) => res.json())
       .map(res => {
         this.userData = res;
-        this._loginStatusChangeObs.next(res);
+        this._loginStatusChangeObs.next(res.user);
+        this.router.navigate(res.redirect);
         return res;
       });
   }
