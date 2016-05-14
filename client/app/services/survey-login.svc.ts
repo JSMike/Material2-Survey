@@ -47,7 +47,7 @@ export class SurveyLoginService {
     return this.http.post('/api/login', JSON.stringify(credentials), options)
       .map((res: Response) => res.json())
       .map(res => {
-        this.userData = res;
+        this.userData = res.user;
         this._loginStatusChangeObs.next(res.user);
         this.router.navigate([res.redirect]);
         return res;

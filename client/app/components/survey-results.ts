@@ -1,11 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {RouteParams} from '@angular/router-deprecated';
+import {Router, RouteParams} from '@angular/router-deprecated';
 
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MdButton} from '@angular2-material/button';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MdIcon} from '@angular2-material/icon';
+
+import {SurveyService, ISurvey} from '../services/survey.svc';
+import {SurveyLoginService, IUser} from '../services/survey-login.svc';
 
 @Component({
   selector: 'survey-results',
@@ -19,32 +22,47 @@ import {MdIcon} from '@angular2-material/icon';
   ]
 })
 export class SurveyResults implements OnInit {
-  id: number;
-  survey: Object;
+  router: Router;
   routeParams: RouteParams;
+  loginSvc: SurveyLoginService;
+  surveySvc: SurveyService;
+  survey: ISurvey;
 
-  constructor(routeParams: RouteParams) {
+  constructor(
+      router: Router,
+      routeParams: RouteParams,
+      loginSvc: SurveyLoginService,
+      surveySvc: SurveyService
+    ) {
+    this.router = router;
     this.routeParams = routeParams;
-  }
-
-  ngOnInit (): void {
-    this.id = +this.routeParams.get('id');
-    console.log(this.id);
+    this.surveySvc = surveySvc;
+    this.surveySvc.survey$.subscribe((response: ISurvey) => {
+      this.survey = response;
+    });
+    this.loginSvc = loginSvc;
     this.survey = {
       id: 0,
-      title: 'What is your quest?',
-      options: [
-        { id: 0, text: 'I seek the Grail.', results: 7 },
-        { id: 1, text: 'To take over the world!', results: 2 },
-        { id: 2, text: 'To kill all humans.', results: 1 },
-        {
-          id: 3,
-          text: 'To be a cat with a poptart body flying through space leaving a rainbow trail',
-          results: 0
-        }
-      ],
-      total: 10
+      title: 'Loading...',
+      options: [],
+      total: 0
     };
+  }
+
+  ngOnInit (): any {
+    let user: IUser = this.loginSvc.getUser();
+    let id = +this.routeParams.get('id');
+    if (!user || !user.isLoggedIn || (user.type !== 'admin')) {
+      return this.router.navigate(['View']);
+    }
+
+    if (id && +id >= 0) {
+      this.survey.id = +id;
+      this.surveySvc.fetchSurvey(this.survey.id).subscribe();
+    } else {
+      return this.router.navigate(['List']);
+    }
+
   }
 
 }

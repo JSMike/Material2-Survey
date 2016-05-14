@@ -60,7 +60,7 @@ var routing = function (router, staticPath, passport) {
 
   router.post('/api/logout', isLoggedIn, function (req, res) {
     req.logout();
-    res.json({
+    return res.json({
       redirect: 'View',
       user: {
         id: -1,
@@ -74,16 +74,32 @@ var routing = function (router, staticPath, passport) {
 
   router.get('/api/survey', function (req, res) {
     if (!isNaN(req.query.id)) {
-      Survey.findOne({ where: { id: +req.query.id } })
-        .then(function (survey) {
-          Option.findAll({ where: { surveyId: survey.id } })
-            .then(function (options) {
-              res.json({
-                survey: survey,
-                options: options
-              });
-            });
+      Survey.findOne({
+        where: { id: +req.query.id },
+        attributes: Object.keys(Survey.attributes).concat([
+          [
+            Sequelize.literal('(select count(*) from Answers a where a.surveyId = Survey.id)'),
+            'total'
+          ]
+        ])
+      })
+      .then(function (survey) {
+        Option.findAll({
+          where: { surveyId: survey.id },
+          attributes: Object.keys(Option.attributes).concat([
+            [
+              Sequelize.literal('(select count(*) from Answers a where a.optionId = Option.id )'),
+              'results'
+            ]
+          ])
+        })
+        .then(function (options) {
+          return res.json({
+            survey: survey,
+            options: options
+          });
         });
+      });
     } else {
       Survey.findAll({
         limit: 1,
@@ -93,29 +109,51 @@ var routing = function (router, staticPath, passport) {
             $notIn: [
               Sequelize
                 .literal('select a.surveyId from Answers a where a.permid=\'' +
-                    req.cookies.permid + '\'')
+                req.cookies.permid + '\'')
             ]
           }
-        }
+        },
+        attributes: Object.keys(Survey.attributes).concat([
+          [
+            Sequelize.literal('(select count(*) from Answers a where a.surveyId = Survey.id)'),
+            'total'
+          ]
+        ])
       })
       .then(function (surveys) {
         if (surveys.length === 0) {
-          res.json({});
+          return res.json({
+            survey: {
+              id: -1,
+              title: 'Oh No! There are no more surveys! Try again later.'
+            },
+            options: []
+          });
         } else {
-          Option.findAll({ where: { surveyId: surveys[0].id } })
-            .then(function (options) {
-              res.json({
-                survey: surveys[0],
-                options: options
-              });
+          Option.findAll({
+            where: {
+              surveyId: surveys[0].id
+            },
+            attributes: Object.keys(Option.attributes).concat([
+              [
+                Sequelize.literal('(select count(*) from Answers a where a.optionId = Option.id )'),
+                'results'
+              ]
+            ])
+          })
+          .then(function (options) {
+            return res.json({
+              survey: surveys[0],
+              options: options
             });
+          });
         }
       });
     }
   });
 
   router.post('/api/survey', isLoggedIn, function (req, res) {
-    if (_.has(req, 'body.id')) {
+    if (_.get(req, 'body.id', -1) > 0) {
       Survey.upsert({ id: req.body.id, title: req.body.title })
         .then(function () {
           return Option.findAll({ where: { optionId: req.body.id } });
@@ -140,7 +178,7 @@ var routing = function (router, staticPath, passport) {
 
           q.all(queries)
             .then(function (results) {
-              res.json(results);
+              return res.json(results);
             });
         });
     } else {
@@ -151,8 +189,11 @@ var routing = function (router, staticPath, passport) {
           });
 
           q.all(queries)
-            .then(function (results) {
-              req.json(results);
+            .then(function (options) {
+              return res.json({
+                survey: survey,
+                options: options
+              });
             });
         });
     }
@@ -175,31 +216,31 @@ var routing = function (router, staticPath, passport) {
       attributes: Object.keys(Survey.attributes).concat([
         [
           Sequelize.literal('(select count(*) from Answers a where a.surveyId = Survey.id )'),
-          'Answers'
+          'total'
         ]
       ])
     })
-    .then(function (surveys) {
-      res.json(surveys);
-    });
+      .then(function (surveys) {
+        return res.json(surveys);
+      });
 
   });
 
   router.post('/api/answer', function (req, res) {
     Answer.create({
       permid: req.cookies.permid,
-      surveyId: res.body.surveyId,
-      optionId: res.body.optionId
+      surveyId: +req.body.surveyId,
+      optionId: +req.body.optionId
     }).then(function (answer) {
-      res.json(answer);
+      return res.json(answer);
     })
-    .catch(function (e) {
-      res.status(500).send(e.message);
-    });
+      .catch(function (e) {
+        res.status(500).send(e.message);
+      });
   });
 
   router.all('*', function (req, res) {
-    if (!req.cookies.id) {
+    if (!req.cookies.permid) {
       res.cookie('permid', req.cookies['connect.sid'], {
         maxAge: 9999999999999,
         expires: new Date((new Date()).getTime() + 9999999999999)

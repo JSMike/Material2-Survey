@@ -1,10 +1,12 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router-deprecated';
+
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MdButton} from '@angular2-material/button';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MdIcon} from '@angular2-material/icon';
+
 import {SurveyLoginService, IUser, ICredentials} from '../services/survey-login.svc';
 
 @Component({

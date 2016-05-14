@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {RouteParams} from '@angular/router-deprecated';
+import {Router, RouteParams} from '@angular/router-deprecated';
 
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MdButton} from '@angular2-material/button';
@@ -22,6 +22,7 @@ import {SurveyLoginService, IUser} from '../services/survey-login.svc';
   ]
 })
 export class SurveyEdit implements OnInit {
+  router: Router;
   loginSvc: SurveyLoginService;
   routeParams: RouteParams;
   surveySvc: SurveyService;
@@ -36,32 +37,34 @@ export class SurveyEdit implements OnInit {
   }
 
   save(): void {
-    console.log('title: ' + this.survey.title + ', options: ' +
-        JSON.stringify(this.survey.options.map((el, idx) => { el.id = idx; return el; })));
-  }
-
-  submit(): void {
-    this.surveySvc.upsertSurvey(this.survey).subscribe(res => {
-      console.log(res);
-    });
+    this.surveySvc.upsertSurvey(this.survey).subscribe();
   }
 
   setSelected(index: number): void {
     this.selectedIndex = index;
   }
 
-  ngOnInit(): void {
+  ngOnInit(): any {
     let user: IUser = this.loginSvc.getUser();
     let id = this.routeParams.get('id');
 
-    if (!user || !user.)
-    if (id && +id >= 0) {
+    if (!user || !user.isLoggedIn || (user.type !== 'admin')) {
+      return this.router.navigate(['View']);
+    }
+
+    if (id && +id > 0) {
       this.survey.id = +id;
       this.surveySvc.fetchSurvey(this.survey.id).subscribe();
     }
   }
 
-  constructor(routeParams: RouteParams, surveySvc: SurveyService, loginSvc: SurveyLoginService) {
+  constructor(
+      router: Router,
+      routeParams: RouteParams,
+      surveySvc: SurveyService,
+      loginSvc: SurveyLoginService
+    ) {
+    this.router = router;
     this.routeParams = routeParams;
     this.loginSvc = loginSvc;
     this.surveySvc = surveySvc;

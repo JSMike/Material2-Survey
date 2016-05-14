@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ROUTER_DIRECTIVES, Router} from '@angular/router-deprecated';
 
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
@@ -9,6 +9,7 @@ import {MdIcon} from '@angular2-material/icon';
 
 import {ISurvey} from '../services/survey.svc';
 import {SurveyListService} from '../services/survey-list.svc';
+import {SurveyLoginService, IUser} from '../services/survey-login.svc';
 
 @Component({
   selector: 'survey-list',
@@ -22,11 +23,19 @@ import {SurveyListService} from '../services/survey-list.svc';
     MdIcon
   ]
 })
-export class SurveyList {
+export class SurveyList implements OnInit {
   router: Router;
+  loginSvc: SurveyLoginService;
   surveys: any[];
   selectedIndex: number;
   surveyListService: SurveyListService;
+
+  ngOnInit(): any {
+    let user: IUser = this.loginSvc.getUser();
+    if (!user || !user.isLoggedIn || (user.type !== 'admin')) {
+      return this.router.navigate(['View']);
+    }
+  }
 
   action(id: number, action: string): void {
     if (action === 'Delete') {
@@ -41,8 +50,9 @@ export class SurveyList {
     this.selectedIndex = index;
   }
 
-  constructor(router: Router, surveyListService: SurveyListService) {
+  constructor(router: Router, surveyListService: SurveyListService, loginSvc: SurveyLoginService) {
     this.router = router;
+    this.loginSvc = loginSvc;
     this.surveys = [];
     this.selectedIndex = -1;
     this.surveyListService = surveyListService;

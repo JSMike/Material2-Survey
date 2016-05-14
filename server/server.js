@@ -51,12 +51,12 @@ if (process.env.NODE_ENV === 'dev') {
 
 // Add express app to letsencrypt-express, and set letsencrypt configuration
 var lex = LEX.create({
-  configDir: '/home/mcebrian/letsencrypt/etc',
+  configDir: '/home/{{YourUser}}/letsencrypt/etc',
   onRequest: app,
   approveRegistration: function (hostname, cb) {
     cb(null, {
       domains: [hostname],
-      email: 'michael.cebrian@gmail.com',
+      email: '{{YourEmail}}',
       agreeTos: true
     });
   }

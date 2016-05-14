@@ -18,8 +18,8 @@ export interface ISurvey {
 }
 
 export interface IAnswer {
-  survey_id: number;
-  option_id: number;
+  surveyId: number;
+  optionId: number;
 }
 
 @Injectable ()
@@ -39,21 +39,23 @@ export class SurveyService {
   }
 
   fetchSurvey(id?: number): Observable<{}> {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
+    let headers: Headers = new Headers({ 'Content-Type': 'application/json' });
+    let options: any = { headers: headers };
+    let ReqOptions: RequestOptions;
+    let search = new URLSearchParams();
 
     if (id) {
-      let search = new URLSearchParams();
       search.set('id', '' + id);
-      options = new RequestOptions({ headers: headers, search: search });
-    } else {
-      options = new RequestOptions({ headers: headers });
+      options.search = search;
     }
 
-    return this.http.get('/api/survey', options)
+    ReqOptions = new RequestOptions(options);
+
+    return this.http.get('/api/survey', ReqOptions)
       .map((res: Response) => res.json())
       .map(res => {
         this.surveyData = {
+          total: res.survey.total,
           title: res.survey.title,
           id: res.survey.id,
           options: res.options
@@ -70,7 +72,11 @@ export class SurveyService {
     return this.http.post('/api/survey', JSON.stringify(survey), options)
       .map((res: Response) => res.json())
       .map(res => {
-        return res;
+        return {
+          title: res.survey.title,
+          id: res.survey.id,
+          options: res.options
+        };
       });
 
   }
@@ -81,6 +87,7 @@ export class SurveyService {
     return this.http.post('/api/answer', JSON.stringify(answer), options)
       .map((res: Response) => res.json())
       .map(res => {
+        this.fetchSurvey().subscribe();
         return res;
       });
 

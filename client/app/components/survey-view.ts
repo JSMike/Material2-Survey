@@ -39,7 +39,10 @@ export class SurveyView {
   selectedIndex: number;
 
   submit(): void {
-    console.log('submitted: ' + this.selectedIndex);
+    this.surveyService.answerSurvey({
+      surveyId: this.survey.id,
+      optionId: this.survey.options[this.selectedIndex].id
+    }).subscribe();
   }
 
   setSelected(index: number): void {
@@ -52,11 +55,10 @@ export class SurveyView {
       this.survey.title = response.title;
       this.survey.id = response.id;
       this.survey.options = response.options;
-    });
-
-    this.surveyService.fetchSurvey().subscribe(data => {
       this.selectedIndex = -1;
     });
+
+    this.surveyService.fetchSurvey().subscribe();
 
     this.survey = {
       id: -1,
