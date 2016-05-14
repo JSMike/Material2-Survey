@@ -35,6 +35,6 @@ All existing surveys will be displayed on the survey list with an option to edit
 
 You can then answer survey questions, or link other guest users to your hosted domain
 
-A demo is live at [https://mcebrian.com:3000](https://mcebrian.com:3000)
+A demo is live at [http://mcebrian.com:3000](http://mcebrian.com:3000)
 
 This is Express + Angular2 app is licensed under MIT, be curious.
