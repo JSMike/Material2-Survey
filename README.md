@@ -1,6 +1,6 @@
 # Material2-Survey by Mike Cebrian
 
-This app requires Node.js 0.10.x or greater and MySQL Server.
+This app requires Node.js +0.10.x, npm +3.x, and MySQL Server.
 
 To install:
 
@@ -8,11 +8,18 @@ Clone the repo.
 
 run npm install
 
+install typings
+
+```
+npm install -g typings
+typings install
+```
+
 [install MySQL for your server](http://dev.mysql.com/doc/refman/5.7/en/installing.html).
 
 Log in as the root user and run the SQL script `/scripts/setup-db.sql`
 
-from the clonned directory run: `NODE_ENV=dev node server/server.js`
+from the clonned directory run: `NODE_ENV='dev' node server/server.js`
 
 direct your browswer to [http://localhost:3000](http://localhost:3000), or your domain at port 3000
 
