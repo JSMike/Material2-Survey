@@ -6,13 +6,20 @@ To install:
 
 Clone the repo.
 
-run npm install
+run `npm install`
 
 install typings
 
 ```
 npm install -g typings
 typings install
+```
+
+buid with:
+
+```
+npm install -g gulp
+gulp build
 ```
 
 [install MySQL for your server](http://dev.mysql.com/doc/refman/5.7/en/installing.html).
