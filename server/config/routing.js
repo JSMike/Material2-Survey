@@ -75,7 +75,7 @@ var routing = function (router, staticPath, passport) {
   router.get('/api/survey', function (req, res) {
     if (!isNaN(req.query.id)) {
       Survey.findOne({
-        where: { id: +req.query.id },
+        where: { id: req.query.id },
         attributes: Object.keys(Survey.attributes).concat([
           [
             Sequelize.literal('(select count(*) from Answers a where a.surveyId = Survey.id)'),
@@ -85,7 +85,7 @@ var routing = function (router, staticPath, passport) {
       })
       .then(function (survey) {
         Option.findAll({
-          where: { surveyId: survey.id },
+          where: { surveyId: +survey.id },
           attributes: Object.keys(Option.attributes).concat([
             [
               Sequelize.literal('(select count(*) from Answers a where a.optionId = Option.id )'),
@@ -156,7 +156,7 @@ var routing = function (router, staticPath, passport) {
     if (_.get(req, 'body.id', -1) > 0) {
       Survey.upsert({ id: req.body.id, title: req.body.title })
         .then(function () {
-          return Option.findAll({ where: { optionId: req.body.id } });
+          return Option.findAll({ where: { surveyId: req.body.id } });
         })
         .then(function (options) {
           var queries = _.map(options, function (opt) {
@@ -172,13 +172,25 @@ var routing = function (router, staticPath, passport) {
             return !opt.id;
           });
 
-          _.each(newOpts, function (opt) {
-            queries.push(Option.insert(opt));
-          });
+          queries = _.concat(queries, _.map(newOpts, function (opt) {
+            return Option.create({ text: opt.text, surveyId: req.body.id })
+              .then(function (created) {
+                return created.save();
+              });
+          }));
 
-          q.all(queries)
-            .then(function (results) {
-              return res.json(results);
+          return q.all(queries);
+        })
+        .then(function () {
+          Survey.findOne({ where: { id: req.body.id } })
+            .then(function (survey) {
+              Option.findAll({ where: { surveyId: survey.id } })
+                .then(function (options) {
+                  return res.json({
+                    survey: survey,
+                    options: options
+                  });
+                });
             });
         });
     } else {
@@ -229,8 +241,8 @@ var routing = function (router, staticPath, passport) {
   router.post('/api/answer', function (req, res) {
     Answer.create({
       permid: req.cookies.permid,
-      surveyId: +req.body.surveyId,
-      optionId: +req.body.optionId
+      surveyId: req.body.surveyId,
+      optionId: req.body.optionId
     }).then(function (answer) {
       return res.json(answer);
     })

@@ -37,7 +37,9 @@ export class SurveyEdit implements OnInit {
   }
 
   save(): void {
-    this.surveySvc.upsertSurvey(this.survey).subscribe();
+    this.surveySvc.upsertSurvey(this.survey).subscribe(res => {
+      this.router.navigate(['List']);
+    });
   }
 
   setSelected(index: number): void {
@@ -69,6 +71,7 @@ export class SurveyEdit implements OnInit {
     this.loginSvc = loginSvc;
     this.surveySvc = surveySvc;
     this.surveySvc.survey$.subscribe((response: ISurvey) => {
+
       this.survey = response;
     });
 
