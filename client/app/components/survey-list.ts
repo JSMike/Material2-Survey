@@ -7,6 +7,9 @@ import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MdIcon} from '@angular2-material/icon';
 
+import {ISurvey} from '../services/survey.svc';
+import {SurveyListService} from '../services/survey-list.svc';
+
 @Component({
   selector: 'survey-list',
   templateUrl: '/app/components/templates/survey-list.html',
@@ -23,6 +26,7 @@ export class SurveyList {
   router: Router;
   surveys: any[];
   selectedIndex: number;
+  surveyListService: SurveyListService;
 
   action(id: number, action: string): void {
     if (action === 'Delete') {
@@ -37,15 +41,16 @@ export class SurveyList {
     this.selectedIndex = index;
   }
 
-  constructor(router: Router) {
+  constructor(router: Router, surveyListService: SurveyListService) {
     this.router = router;
-    this.surveys = [{
-      id: 0,
-      total: 10,
-      title: 'All the doors are locked! How did you get in here!?'
-    }];
-
+    this.surveys = [];
     this.selectedIndex = -1;
+    this.surveyListService = surveyListService;
+    this.surveyListService.surveyList$.subscribe((response: ISurvey[]) => {
+      this.surveys = response;
+    });
+
+    this.surveyListService.fetchSurveyList().subscribe();
   }
 
 }

@@ -1,9 +1,10 @@
 'use strict';
 
 var path = require('path');
+var q = require('q');
 var _ = require('lodash');
+var Sequelize = require('sequelize');
 var sequelize = require('./sequelize');
-var User = sequelize.User;
 var Survey = sequelize.Survey;
 var Option = sequelize.Option;
 var Answer = sequelize.Answer;
@@ -13,7 +14,7 @@ function isLoggedIn(req, res, next) {
     return next();
   }
 
-  return res.json({ redirect: 'login' });
+  return res.json({ redirect: 'Login' });
 }
 
 var routing = function (router, staticPath, passport) {
@@ -23,7 +24,7 @@ var routing = function (router, staticPath, passport) {
       if (err) {
         return res.json({
           error: true,
-          redirect: 'login',
+          redirect: 'Login',
           message: _.get(err, 'message', 'Error!')
         });
       }
@@ -57,72 +58,157 @@ var routing = function (router, staticPath, passport) {
     })(req, res, next);
   });
 
-  router.get('/api/logout', isLoggedIn, function (req, res) {
+  router.post('/api/logout', isLoggedIn, function (req, res) {
     req.logout();
     res.json({
       redirect: 'View',
+      user: {
+        id: -1,
+        username: 'anonymous',
+        type: 'anonymous',
+        isLoggedIn: false
+      },
       isLoggedIn: req.isAuthenticated()
     });
   });
 
   router.get('/api/survey', function (req, res) {
-    var query = {};
-    if (req.query.after) {
-      query.updated = { $gt: new Date(req.query.after) };
+    if (!isNaN(req.query.id)) {
+      Survey.findOne({ where: { id: +req.query.id } })
+        .then(function (survey) {
+          Option.findAll({ where: { surveyId: survey.id } })
+            .then(function (options) {
+              res.json({
+                survey: survey,
+                options: options
+              });
+            });
+        });
+    } else {
+      Survey.findAll({
+        limit: 1,
+        order: [Sequelize.fn('Rand')],
+        where: {
+          id: {
+            $notIn: [
+              Sequelize
+                .literal('select a.surveyId from Answers a where a.permid=\'' +
+                    req.cookies.permid + '\'')
+            ]
+          }
+        }
+      })
+      .then(function (surveys) {
+        if (surveys.length === 0) {
+          res.json({});
+        } else {
+          Option.findAll({ where: { surveyId: surveys[0].id } })
+            .then(function (options) {
+              res.json({
+                survey: surveys[0],
+                options: options
+              });
+            });
+        }
+      });
+    }
+  });
+
+  router.post('/api/survey', isLoggedIn, function (req, res) {
+    if (_.has(req, 'body.id')) {
+      Survey.upsert({ id: req.body.id, title: req.body.title })
+        .then(function () {
+          return Option.findAll({ where: { optionId: req.body.id } });
+        })
+        .then(function (options) {
+          var queries = _.map(options, function (opt) {
+            var reqOpt = _.find(req.body.options, { id: opt.id });
+            if (reqOpt) {
+              return Option.upsert(reqOpt);
+            } else {
+              return opt.destroy();
+            }
+          });
+
+          var newOpts = _.filter(req.body.options, function (opt) {
+            return !opt.id;
+          });
+
+          _.each(newOpts, function (opt) {
+            queries.push(Option.insert(opt));
+          });
+
+          q.all(queries)
+            .then(function (results) {
+              res.json(results);
+            });
+        });
+    } else {
+      Survey.create({ title: req.body.title })
+        .then(function (survey) {
+          var queries = _.map(req.body.options, function (opt) {
+            return Option.create({ text: opt.text, surveyId: survey.id });
+          });
+
+          q.all(queries)
+            .then(function (results) {
+              req.json(results);
+            });
+        });
+    }
+  });
+
+  router.delete('/api/survey', isLoggedIn, function (req, res) {
+    if (!req.body.id) {
+      return res.status(400).json({
+        message: 'Invalid delete request, no "id" field in request body.'
+      });
     }
 
-    Survey.findOne(query, {
-    }, function (err, resume) {
-      if (err) {
-        return res.status(500).send('Error: ' + err);
-      }
-
-      return res.send(resume);
+    Survey.destroy({ where: { id: req.body.id } }).then(function () {
+      return res.status(200).send();
     });
   });
 
-  router.post('/api/survey', function (req, res) {
-    var query = {};
-    if (req.query.after) {
-      query.updated = { $gt: new Date(req.query.after) };
-    }
-
-    Survey.findOne(query, {
-    }, function (err, resume) {
-      if (err) {
-        return res.status(500).send('Error: ' + err);
-      }
-
-      return res.send(resume);
+  router.get('/api/survey-list', isLoggedIn, function (req, res) {
+    Survey.findAll({
+      attributes: Object.keys(Survey.attributes).concat([
+        [
+          Sequelize.literal('(select count(*) from Answers a where a.surveyId = Survey.id )'),
+          'Answers'
+        ]
+      ])
+    })
+    .then(function (surveys) {
+      res.json(surveys);
     });
+
   });
 
   router.post('/api/answer', function (req, res) {
-    var query = {};
-    if (req.query.after) {
-      query.updated = { $gt: new Date(req.query.after) };
-    }
-
-    Survey.findOne(query, {
-    }, function (err, resume) {
-      if (err) {
-        return res.status(500).send('Error: ' + err);
-      }
-
-      return res.send(resume);
+    Answer.create({
+      permid: req.cookies.permid,
+      surveyId: res.body.surveyId,
+      optionId: res.body.optionId
+    }).then(function (answer) {
+      res.json(answer);
+    })
+    .catch(function (e) {
+      res.status(500).send(e.message);
     });
   });
 
-  router.get('/', function (req, res) {
-    if (!res.session.cookie.id) {
-      res.cookie('id', req.session.id, { expires: new Date(999999999999999)} );
+  router.all('*', function (req, res) {
+    if (!req.cookies.id) {
+      res.cookie('permid', req.cookies['connect.sid'], {
+        maxAge: 9999999999999,
+        expires: new Date((new Date()).getTime() + 9999999999999)
+      });
     }
+
     return res.sendFile(path.join(staticPath, 'index.html'));
   });
 
-  router.all('*', function (req, res) {
-    return res.redirect('/');
-  });
 };
 
 module.exports = routing;

@@ -10,7 +10,6 @@ import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 
 import {SurveyLoginService} from '../services/survey-login.svc';
 
-
 interface ICondition {
   isLoggedIn?: boolean;
   type?: string;
@@ -58,7 +57,7 @@ export class SurveySidenav implements OnInit {
 
   actionItem(action: string): void {
     if (action === 'Logout') {
-      this.loginSvc.logout();
+      this.loginSvc.logout().subscribe();
     } else {
       this.router.navigate([action]);
     }
@@ -92,7 +91,7 @@ export class SurveySidenav implements OnInit {
         action: 'List',
         condition: {
           isLoggedIn: true,
-          type: 'Admin'
+          type: 'admin'
         }
       },
       {
@@ -100,7 +99,7 @@ export class SurveySidenav implements OnInit {
         action: 'Edit',
         condition: {
           isLoggedIn: true,
-          type: 'Admin'
+          type: 'admin'
         }
       },
       {

@@ -24,6 +24,8 @@ import {SurveyToolbar} from './survey-toolbar';
 import {SurveySidenav} from './survey-sidenav';
 import {SurveySidenavService} from '../services/survey-sidenav.svc';
 import {SurveyLoginService} from '../services/survey-login.svc';
+import {SurveyService} from '../services/survey.svc';
+import {SurveyListService} from '../services/survey-list.svc';
 
 @Component({
   selector: 'survey-app',
@@ -49,7 +51,9 @@ import {SurveyLoginService} from '../services/survey-login.svc';
     MdIconRegistry,
     MdRadioDispatcher,
     SurveySidenavService,
-    SurveyLoginService
+    SurveyLoginService,
+    SurveyService,
+    SurveyListService
   ]
 })
 @RouteConfig ([

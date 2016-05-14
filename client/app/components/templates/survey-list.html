@@ -8,9 +8,9 @@
       Answers: {{survey.total}}
     </md-card-subtitle>
     <md-card-actions align="end">
-      <button md-button color="accent" (click)="action(i, 'Edit')">Edit</button>
-      <button md-button color="primary" (click)="action(i, 'Results')">View Results</button>
-      <button md-button color="warn" (click)="action(i, 'Delete')">Delete</button>
+      <button md-button color="accent" (click)="action(survey.id, 'Edit')">Edit</button>
+      <button md-button color="primary" (click)="action(survey.id, 'Results')">View Results</button>
+      <button md-button color="warn" (click)="action(survey.id, 'Delete')">Delete</button>
     </md-card-actions>
   </md-card>
 </div>

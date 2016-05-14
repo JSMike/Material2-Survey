@@ -5,12 +5,7 @@ import {MdButton} from '@angular2-material/button';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MdIcon} from '@angular2-material/icon';
-import {SurveyLoginService} from '../services/survey-login.svc';
-
-interface IUser {
-  isLoggedIn: boolean;
-  type: string;
-}
+import {SurveyLoginService, IUser, ICredentials} from '../services/survey-login.svc';
 
 @Component({
   selector: 'survey-login',
@@ -25,7 +20,7 @@ interface IUser {
 })
 export class SurveyLogin {
   router: Router;
-  login: Object;
+  login: ICredentials;
   loginSvc: SurveyLoginService;
   selectedIndex: number = -1;
 

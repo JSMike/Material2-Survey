@@ -1,6 +1,6 @@
 'use strict';
 
-var Sequelize = require('Sequelize');
+var Sequelize = require('sequelize');
 var passportSequelize = require('passport-local-sequelize');
 var db = new Sequelize('survey', 'survey', 'survey');
 
@@ -39,23 +39,35 @@ var User = passportSequelize.defineUser(db, {
 });
 
 var Survey = db.define('Survey', {
-  title: Sequelize.STRING
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
 });
 
-var Option = db.define('SurveyOption', {
-  value: Sequelize.INTEGER
+var Option = db.define('Option', {
+  text: {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
 });
 
 var Answer = db.define('Answer', {
-  session: Sequelize.STRING
+  permid: {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
 });
 
 /**
  * Define Relationships
  */
-Survey.hasMany(Option);
-Survey.hasMany(Answer);
-Option.hasMany(Answer);
+Survey.hasMany(Option, { as: 'Options', foreignKeyConstraint: true, foreignKey: 'surveyId' });
+Option.belongsTo(Survey, { foreignKeyConstraint: true, foreignKey: 'surveyId' });
+Survey.hasMany(Answer, { as: 'Answers', foreignKeyConstraint: true, foreignKey: 'surveyId' });
+Option.hasMany(Answer, { as: 'Answers', foreignKeyConstraint: true, foreignKey: 'optionId' });
+Answer.belongsTo(Survey, { foreignKeyConstraint: true, foreignKey: 'surveyId' });
+Answer.belongsTo(Option, { foreignKeyConstraint: true, foreignKey: 'optionId' });
 
 User.sync()
   .then(function () {

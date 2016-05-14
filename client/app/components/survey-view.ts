@@ -1,9 +1,26 @@
 import {Component} from '@angular/core';
+
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MdButton} from '@angular2-material/button';
 import {MD_LIST_DIRECTIVES} from '@angular2-material/list';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import {MdIcon} from '@angular2-material/icon';
+
+import {SurveyService, ISurvey} from '../services/survey.svc';
+
+interface IOption {
+  id: number;
+  text: string;
+}
+
+interface ISurveyResponse {
+  survey: {
+    title: string;
+    id: number;
+  };
+
+  options: IOption[];
+}
 
 @Component({
   selector: 'survey-view',
@@ -17,7 +34,8 @@ import {MdIcon} from '@angular2-material/icon';
   ]
 })
 export class SurveyView {
-  survey: Object;
+  surveyService: SurveyService;
+  survey: ISurvey;
   selectedIndex: number;
 
   submit(): void {
@@ -28,14 +46,22 @@ export class SurveyView {
     this.selectedIndex = index;
   }
 
-  constructor() {
+  constructor(surveyService: SurveyService) {
+    this.surveyService = surveyService;
+    this.surveyService.survey$.subscribe((response: ISurvey) => {
+      this.survey.title = response.title;
+      this.survey.id = response.id;
+      this.survey.options = response.options;
+    });
+
+    this.surveyService.fetchSurvey().subscribe(data => {
+      this.selectedIndex = -1;
+    });
+
     this.survey = {
-      id: 0,
-      title: 'All the doors are locked! How did you get in here!?',
-      options: [
-        { id: 0, text: 'yes' },
-        { id: 1, text: 'no' }
-      ]
+      id: -1,
+      title: 'Loading...',
+      options: []
     };
 
     this.selectedIndex = -1;
