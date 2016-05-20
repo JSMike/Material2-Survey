@@ -10,7 +10,7 @@
     "preserveConstEnums": true,
     "sourceMap": true
   },
-  "exclude": [
-    "node_modules"
+  "files": [
+    "client/app/main.ts"
   ]
 }

@@ -17,7 +17,7 @@ var routing = require('./config/routing');
 var app = express();
 var router = express.Router();
 var env = process.env.NODE_ENV || 'dev';
-var staticPath = path.join(__dirname, '..', (env === 'dev' ? 'client' : 'build'));
+var staticPath = path.join(__dirname, '..', (env === 'dev' ? 'client' : 'dist'));
 var morganEnv = 'dev';
 var passport;
 
@@ -30,7 +30,7 @@ app.use(session({
 passport = passportConfig(app);
 
 // Express Settings
-if (env !== 'dev') { // If not dev, add middleware to force https
+if (env === 'prod') { // If not dev, add middleware to force https
   app.use(forceSSL);
 }
 
@@ -45,7 +45,7 @@ app.use('/', router); // Attach router to the base URL
 routing(router, staticPath, passport); // Add routing
 
 // Add allows local dev without https cert
-if (process.env.NODE_ENV === 'dev') {
+if (process.env.NODE_ENV !== 'prod') {
   LEX = LEX.testing();
 }
 

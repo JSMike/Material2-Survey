@@ -2,23 +2,18 @@
 
 var gulp = require('gulp');
 var conf = require('../gulp.config');
-var sourcemaps = require('gulp-sourcemaps');
-var tsc = require('gulp-typescript');
-var tsProject = tsc.createProject('tsconfig.json');
+var browserify = require('browserify');
+var tsify = require('tsify');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
+var uglify = require('gulp-uglify');
 
 gulp.task('build', function () {
-  var sourceTsFiles = [
-    conf.tsFiles,
-    conf.tsdFiles
-  ];
-  var tsResult = gulp.src(sourceTsFiles)
-    .pipe(sourcemaps.init())
-    .pipe(tsc(tsProject));
-
-  tsResult.dts
-    .pipe(gulp.dest(conf.devPath));
-
-  return tsResult.js
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(conf.devPath));
+  return browserify(conf.main)
+    .plugin(tsify)
+    .bundle()
+    .pipe(source('surveyApp.js'))
+    .pipe(buffer())
+    .pipe(uglify())
+    .pipe(gulp.dest('./dist/app'));
 });

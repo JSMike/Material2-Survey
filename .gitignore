@@ -6,8 +6,8 @@ typings/
 .DS_Store*
 Thumbs.db
 
-# Ignore Build Directory
-build/
+# Ignore dist directory
+dist/
 
 # Ignore built js
 client/**/*.js

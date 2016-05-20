@@ -6,6 +6,7 @@ var devPath = path.join(__dirname, '/client');
 var typingsPath = path.join(__dirname, '/typings');
 
 module.exports = {
+  main: path.join(devPath, '/app/main.ts'),
   devPath: devPath,
   serverPath: serverPath,
   typingsPath: typingsPath,
@@ -22,7 +23,7 @@ module.exports = {
     watch: ['server/**/*.js'],
     env: {
       PORT: 3000,
-      NODE_ENV: 'dev'
+      NODE_ENV: 'dist'
     }
   }
 };
