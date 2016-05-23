@@ -4,7 +4,12 @@ This app requires Node.js +0.10.x, npm +3.x, and MySQL Server.
 
 To install:
 
-Clone the repo.
+Clone this repo.
+
+update npm if below v3.x:
+run `npm install -g npm`
+
+Then install node modules:
 
 run `npm install`
 
@@ -26,7 +31,7 @@ gulp build
 
 Log in as the root user and run the SQL script `/scripts/setup-db.sql`
 
-from the clonned directory run: `NODE_ENV='dev' node server/server.js`
+from the cloned directory run: `node server/server.js`
 
 direct your browswer to [http://localhost:3000](http://localhost:3000), or your domain at port 3000
 
