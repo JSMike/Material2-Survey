@@ -4,6 +4,7 @@ var path = require('path');
 var q = require('q');
 var _ = require('lodash');
 var Sequelize = require('sequelize');
+var mysql = require('mysql');
 var sequelize = require('./sequelize');
 var Survey = sequelize.Survey;
 var Option = sequelize.Option;
@@ -73,6 +74,8 @@ var routing = function (router, staticPath, passport) {
   });
 
   router.get('/api/survey', function (req, res) {
+    var answeredQuestions;
+
     if (!isNaN(req.query.id)) {
       Survey.findOne({
         where: { id: req.query.id },
@@ -101,6 +104,9 @@ var routing = function (router, staticPath, passport) {
         });
       });
     } else {
+      answeredQuestions = mysql.format('select a.surveyId from Answers a where a.permid=??',
+        [req.cookies.permid]);
+
       Survey.findAll({
         limit: 1,
         order: [Sequelize.fn('Rand')],
@@ -108,8 +114,7 @@ var routing = function (router, staticPath, passport) {
           id: {
             $notIn: [
               Sequelize
-                .literal('select a.surveyId from Answers a where a.permid=\'' +
-                req.cookies.permid + '\'')
+                .literal(answeredQuestions)
             ]
           }
         },

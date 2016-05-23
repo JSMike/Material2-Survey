@@ -5,10 +5,10 @@
     "module": "commonjs",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "removeComments": false,
+    "removeComments": true,
     "preserveConstEnums": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "outDir": "dist"
   },
   "files": [
     "client/app/main.ts"
