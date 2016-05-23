@@ -8,7 +8,11 @@ var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 
-gulp.task('build', function () {
+gulp.task('build', [
+  'copy:html',
+  'copy:resources',
+  'copy:css'
+], function () {
   return browserify(conf.main)
     .plugin(tsify)
     .bundle()

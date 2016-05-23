@@ -104,7 +104,7 @@ var routing = function (router, staticPath, passport) {
         });
       });
     } else {
-      answeredQuestions = mysql.format('select a.surveyId from Answers a where a.permid=??',
+      answeredQuestions = mysql.format('select a.surveyId from Answers a where a.permid=\'??\'',
         [req.cookies.permid]);
 
       Survey.findAll({

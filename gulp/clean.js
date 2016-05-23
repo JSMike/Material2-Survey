@@ -4,12 +4,13 @@ var gulp = require('gulp');
 var clean = require('del');
 var conf = require('../gulp.config');
 
-gulp.task('clean:js', function (done) {
-  clean(conf.builtJS)
+gulp.task('clean:html', function (done) {
+  clean(conf.htmlFiles.replace('client', 'dist'))
     .then(function () {
       done();
-    }, function (err) {
+    },
 
+    function (err) {
       console.error(err);
     });
 });
