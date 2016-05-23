@@ -2,7 +2,7 @@
   <md-card-title><md-icon>lock_outline</md-icon>Login</md-card-title>
   <md-list>
     <md-list-item align="start">
-      <md-input placeholder="Username" [(ngModel)]="login.username">
+      <md-input placeholder="Username" [(ngModel)]="login.username" (keyup.enter)="submit()">
         <span md-prefix>
           <md-icon>account_circle</md-icon>
           &nbsp;
@@ -10,7 +10,7 @@
       </md-input>
     </md-list-item>
     <md-list-item align="start">
-      <md-input placeholder="Password" [(ngModel)]="login.password" type="password">
+      <md-input placeholder="Password" [(ngModel)]="login.password"  (keyup.enter)="submit()" type="password">
         <span md-prefix>
           <md-icon>vpn_key</md-icon>
           &nbsp;
