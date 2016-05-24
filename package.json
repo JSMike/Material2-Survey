@@ -65,6 +65,7 @@
     "browser-sync": "^2.12.8",
     "browserify": "^13.0.1",
     "del": "^2.2.0",
+    "exorcist": "^0.4.0",
     "glob-array": "^0.1.2",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
@@ -88,6 +89,7 @@
     "typings": "^0.7.11",
     "vinyl-buffer": "^1.0.0",
     "vinyl-paths": "^2.1.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "vinyl-transform": "^1.0.0"
   }
 }

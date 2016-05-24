@@ -4,8 +4,8 @@ var gulp = require('gulp');
 var conf = require('../gulp.config');
 
 gulp.task('copy:resources', function () {
-  return gulp.src(conf.devPath + '/resources/**/*.*')
-    .pipe(gulp.dest(conf.buildPath + '/resources'));
+  return gulp.src(conf.devPath + '/app/resources/**/*.*')
+    .pipe(gulp.dest(conf.buildPath + '/app/resources'));
 });
 
 gulp.task('copy:css', function () {
