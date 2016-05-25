@@ -1,6 +1,6 @@
 # Material2-Survey by Mike Cebrian
 
-This app requires Node.js +0.10.x, npm +3.x, and MySQL Server.
+This app requires Node.js +4.2, npm +3.x, and MySQL Server.
 
 To install:
 
@@ -31,7 +31,7 @@ gulp build
 
 Log in as the root user and run the SQL script `/scripts/setup-db.sql`
 
-from the cloned directory run: `node server/server.js`
+from the cloned directory run: `NODE_ENV='dist' node server/server.js`
 
 direct your browswer to [http://localhost:3000](http://localhost:3000), or your domain at port 3000
 
